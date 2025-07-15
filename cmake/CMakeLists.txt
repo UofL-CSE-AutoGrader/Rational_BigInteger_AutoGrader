@@ -14,7 +14,31 @@ FetchContent_Declare(
   GIT_TAG        v1.0.0
   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
+
 FetchContent_MakeAvailable(BigInteger)
+
+#----- Fetch Unit Tests -----
+FetchContent_Declare(
+  RationalUnitTests
+  GIT_REPOSITORY https://github.com/UofL-CSE-AutoGrader/Rational_BigInteger_AutoGrader
+  GIT_TAG        v1.0.1  
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(RationalUnitTests)
+
+# Use all .cpp files in the tests directory 
+file(GLOB RATIONAL_TEST_SOURCES "${rationalunittests_SOURCE_DIR}/tests/*.cpp")
+add_executable(rational_tests ${RATIONAL_TEST_SOURCES})
+
+target_link_libraries(rational_tests
+    gtest_main
+    rational_lib
+)
+
+include(GoogleTest)
+enable_testing()
+gtest_discover_tests(rational_tests)
+
 
 # --- Fetch GoogleTest ---
 FetchContent_Declare(
@@ -23,6 +47,8 @@ FetchContent_Declare(
   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(googletest)
+
+
 
 enable_testing()
 
@@ -40,12 +66,6 @@ target_include_directories(rational_lib
 )
 
 # --- Main executable for manual testing ---
-add_executable(rational_test src/main.cpp)
-target_link_libraries(rational_test rational_lib)
+add_executable(rational_main src/main.cpp)
+target_link_libraries(rational_main rational_lib)
 
-# --- Unit Tests ---
-file(GLOB TEST_SOURCES "tests/*.cpp")
-add_executable(rational_tests ${TEST_SOURCES})
-target_link_libraries(rational_tests gtest_main rational_lib)
-include(GoogleTest)
-gtest_discover_tests(rational_tests)
