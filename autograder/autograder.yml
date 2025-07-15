@@ -10,6 +10,7 @@ jobs:
     timeout-minutes: 5
     env:
       BASE_URL: https://raw.githubusercontent.com/UofL-CSE-AutoGrader/Rational_BigInteger_AutoGrader/refs/heads/main
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -19,32 +20,33 @@ jobs:
 
       - name: Download canonical autograder
         run: |
-        wget -O autograder.yml $BASE_URL/autograder.yml
+          wget -O autograder.yml $BASE_URL/autograder.yml
 
-    - name: Compare local autograder.yml to canonical
-      run: |
-        if ! diff -q .github/workflows/autograder.yml autograder.yml; then
-          echo "The local autograder.yml does not match the canonical version."
-          echo "Please update your autograder.yml file."
-          exit 1
-        else
-          echo "The local autograder.yml matches the canonical version."
-        fi
+      - name: Compare local autograder.yml to canonical
+        run: |
+          if ! diff -q .github/workflows/autograder.yml autograder.yml; then
+            echo "The local autograder.yml does not match the canonical version."
+            echo "Please update your autograder.yml file."
+            exit 1
+          else
+            echo "The local autograder.yml matches the canonical version."
+          fi
 
       - name: Install GoogleTest dependencies
-        run: sudo apt-get update && sudo apt-get install -y libgtest-dev cmake g++ wget 
-
-      - name: Remove Existing Protected Files
         run: |
-          rm include/Rational.hpp
-          rm CMakeLists.txt
+          sudo apt-get update
+          sudo apt-get install -y libgtest-dev cmake g++ wget
 
+      - name: Remove existing protected files
+        run: |
+          rm -f include/Rational.hpp
+          rm -f CMakeLists.txt
 
       - name: Download protected autograder files
         run: |
           wget -O include/Rational.hpp $BASE_URL/includes/Rational.hpp
           wget -O CMakeLists.txt $BASE_URL/cmake/CMakeLists.txt
-          
+
       - name: Configure project
         run: cmake -B build
 
