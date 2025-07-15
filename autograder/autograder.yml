@@ -20,7 +20,7 @@ jobs:
 
       - name: Download canonical autograder
         run: |
-          wget -O autograder.yml $BASE_URL/autograder.yml
+          wget -O autograder.yml $BASE_URL/autograder/autograder.yml
 
       - name: Compare local autograder.yml to canonical
         run: |
