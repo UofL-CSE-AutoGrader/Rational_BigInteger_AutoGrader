@@ -25,11 +25,11 @@ jobs:
       - name: Compare local autograder.yml to canonical
         run: |
           if ! diff -q .github/workflows/autograder.yml autograder.yml; then
-            echo "The local autograder.yml does not match the canonical version."
+            echo "The local autograder.yml appears to have been modified."
             echo "Please update your autograder.yml file."
             exit 1
           else
-            echo "The local autograder.yml matches the canonical version."
+            echo "The local autograder.yml has been validated."
           fi
 
       - name: Install GoogleTest dependencies
